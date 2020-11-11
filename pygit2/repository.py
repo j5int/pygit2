@@ -57,6 +57,7 @@ from .remote import RemoteCollection
 from .blame import Blame
 from .utils import to_bytes, is_string, StrArray
 from .submodule import Submodule
+from .packbuilder import PackBuilder
 
 
 class BaseRepository(_Repository):
@@ -74,6 +75,38 @@ class BaseRepository(_Repository):
         repo_cptr = ffi.new('git_repository **')
         ffi.buffer(repo_cptr)[:] = self._pointer[:]
         self._repo = repo_cptr[0]
+
+    def pack(self, path, pack_delegate=None, max_threads=None):
+        """Pack the objects in the odb chosen by the pack_delegate function
+        and write .pack and .idx files for them.
+
+        Returns: the number of objects written to the pack
+
+        Parameters:
+
+        path
+            The path to which the .pack and .idx files should be written.
+
+        pack_delegate
+            The method which will provide add the objects to the pack builder. Defaults to all objects.
+
+        max_threads
+            The maximum number of threads the PackBuilder will spawn.
+        """
+
+        def pack_all_objects(pack_builder):
+            for obj in self:
+                pack_builder.add(obj)
+
+        pack_delegate = pack_delegate or pack_all_objects
+
+        builder = PackBuilder(self)
+        if max_threads:
+            builder.set_max_threads(max_threads)
+        pack_delegate(builder)
+        builder.write(path)
+
+        return builder.written_objects_count
 
     def lookup_submodule(self, path):
         csub = ffi.new('git_submodule **')
