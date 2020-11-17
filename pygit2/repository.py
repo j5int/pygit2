@@ -76,7 +76,23 @@ class BaseRepository(_Repository):
         ffi.buffer(repo_cptr)[:] = self._pointer[:]
         self._repo = repo_cptr[0]
 
-    def pack(self, path, pack_delegate=None, max_threads=None):
+    # Backwards compatible ODB access
+    def read(self, *args, **kwargs):
+        """read(oid) -> type, data, size
+
+        Read raw object data from the repository.
+        """
+        return self.odb.read(*args, **kwargs)
+
+    def write(self, *args, **kwargs):
+        """write(type, data) -> Oid
+
+        Write raw object data into the repository. First arg is the object
+        type, the second one a buffer with data. Return the Oid of the created
+        object."""
+        return self.odb.write(*args, **kwargs)
+
+    def pack(self, path=None, pack_delegate=None, max_threads=None):
         """Pack the objects in the odb chosen by the pack_delegate function
         and write .pack and .idx files for them.
 
@@ -85,7 +101,7 @@ class BaseRepository(_Repository):
         Parameters:
 
         path
-            The path to which the .pack and .idx files should be written.
+            The path to which the .pack and .idx files should be written. None will write to the default location
 
         pack_delegate
             The method which will provide add the objects to the pack builder. Defaults to all objects.
@@ -104,7 +120,7 @@ class BaseRepository(_Repository):
         if max_threads:
             builder.set_max_threads(max_threads)
         pack_delegate(builder)
-        builder.write(path)
+        builder.write(path=path)
 
         return builder.written_objects_count
 
