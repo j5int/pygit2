@@ -1,9 +1,12 @@
-1.5.0 (UNRELEASED)
+1.4.0+j5 (2020-11-28)
 -------------------------
 
 - Fix truncated diff when there are nulls
   `#1047 <https://github.com/libgit2/pygit2/pull/1047>`_
   `#1043 <https://github.com/libgit2/pygit2/issues/1043>`_
+
+- Add Packbuilder support:
+  `#1048 <https://github.com/libgit2/pygit2/pull/1048>`_
 
 Breaking changes:
 
