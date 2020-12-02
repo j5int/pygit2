@@ -65,7 +65,6 @@ h_files = [
     'checkout.h',
     'transport.h',
     'proxy.h',
-    'indexer.h',
     'pack.h',
     'remote.h',
     'clone.h',

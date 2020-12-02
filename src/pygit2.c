@@ -277,17 +277,6 @@ moduleinit(PyObject* m)
     INIT_TYPE(RepositoryType, NULL, PyType_GenericNew)
     ADD_TYPE(m, Repository)
 
-    /* Odb */
-    INIT_TYPE(OdbType, NULL, PyType_GenericNew)
-    ADD_TYPE(m, Odb)
-
-    INIT_TYPE(OdbBackendType, NULL, PyType_GenericNew)
-    ADD_TYPE(m, OdbBackend)
-    INIT_TYPE(OdbBackendPackType, &OdbBackendType, PyType_GenericNew)
-    ADD_TYPE(m, OdbBackendPack)
-    INIT_TYPE(OdbBackendLooseType, &OdbBackendType, PyType_GenericNew)
-    ADD_TYPE(m, OdbBackendLoose)
-
     /* Oid */
     INIT_TYPE(OidType, NULL, PyType_GenericNew)
     ADD_TYPE(m, Oid)

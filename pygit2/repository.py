@@ -76,22 +76,6 @@ class BaseRepository(_Repository):
         ffi.buffer(repo_cptr)[:] = self._pointer[:]
         self._repo = repo_cptr[0]
 
-    # Backwards compatible ODB access
-    def read(self, *args, **kwargs):
-        """read(oid) -> type, data, size
-
-        Read raw object data from the repository.
-        """
-        return self.odb.read(*args, **kwargs)
-
-    def write(self, *args, **kwargs):
-        """write(type, data) -> Oid
-
-        Write raw object data into the repository. First arg is the object
-        type, the second one a buffer with data. Return the Oid of the created
-        object."""
-        return self.odb.write(*args, **kwargs)
-
     def pack(self, path=None, pack_delegate=None, n_threads=None):
         """Pack the objects in the odb chosen by the pack_delegate function
         and write .pack and .idx files for them.

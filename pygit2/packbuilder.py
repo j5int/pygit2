@@ -30,7 +30,7 @@ from .ffi import ffi, C
 from .utils import to_bytes
 
 
-class PackBuilder:
+class PackBuilder(object):
 
     def __init__(self, repo):
 
